@@ -11,6 +11,7 @@ const EditClientPage = () => {
         email: "",
         phone: "",
         cn_dni: "",
+        available_slots: "",
     });
     const [error, setError] = useState("");
 
@@ -28,6 +29,7 @@ const EditClientPage = () => {
                     email: response.data.email,
                     phone: response.data.phone,
                     cn_dni: response.data.cn_dni,
+                    available_slots: response.data.available_slots,
                 });
             } catch (error) {
                 console.error("Error al cargar los datos del cliente:", error);
@@ -114,6 +116,18 @@ const EditClientPage = () => {
                         value={formData.cn_dni}
                         onChange={handleChange}
                         required
+                        style={styles.input}
+                    />
+                </div>
+                <div style={styles.inputGroup}>
+                    <label style={styles.label}>Cantidad de Cupos:</label>
+                    <input
+                        type="number"
+                        name="available_slots"
+                        value={formData.available_slots}
+                        onChange={handleChange}
+                        required
+                        min="0"
                         style={styles.input}
                     />
                 </div>

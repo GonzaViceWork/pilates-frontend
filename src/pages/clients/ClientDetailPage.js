@@ -44,12 +44,22 @@ const ClientDetailPage = () => {
                 session.clients?.includes(parseInt(client_id))  // Verifica si 'client.id' existe
             );
             // console.log(assignedSessions);  // Verifica las sesiones filtradas
-            const formattedSessions = assignedSessions.map((session) => ({
-                ...session,
-                title: `${session.session_type === "group" ? "Sesión Grupal" : "Sesión Privada"} - ${moment(session.date).format("DD-MM-YYYY h:mm A")}`,
-                start: new Date(session.date),
-                end: new Date(moment(session.date).add(1, 'hours')), // Añadir una hora a la fecha de inicio
-            }));
+
+            const formattedSessions = assignedSessions.map((session) => {
+                // Definir color según estado y asistencia
+                let color = "#4A90E2"; // Azul por defecto (pendiente)
+                if (session.status === "finished") {
+                    color = session.attended_clients.includes(parseInt(client_id)) ? "#5CB85C" : "#D9534F";
+                }
+
+                return {
+                    ...session,
+                    title: `${session.session_type === "group" ? "Sesión Grupal" : "Sesión Privada"} - ${moment(session.date).format("DD-MM-YYYY h:mm A")}`,
+                    start: new Date(session.date),
+                    end: new Date(moment(session.date).add(1, 'hours')),
+                    color: color, // Agregar color como propiedad
+                };
+            });
             setSessions(formattedSessions);
         } catch (error) {
             console.error("Error al obtener las sesiones:", error);
@@ -107,7 +117,16 @@ const ClientDetailPage = () => {
         title: `${session.session_type === "group" ? "Sesión Grupal" : "Sesión Privada"} - ${moment(session.date).format("DD-MM-YYYY h:mm A")}`,
         start: new Date(session.date),
         end: new Date(moment(session.date).add(1, 'hours')),
+        color: session.color,  // Asegurar que el color se pase
     }));
+
+    // Establecer estilos en el calendario
+    const eventStyleGetter = (event) => {
+        let backgroundColor = event.color; // Usa el color definido en fetchSessions
+        return {
+            style: { backgroundColor },
+        };
+    };
 
     return (
         <div style={styles.container}>
@@ -133,6 +152,7 @@ const ClientDetailPage = () => {
                     startAccessor="start"
                     endAccessor="end"
                     style={styles.calendar}
+                    eventPropGetter={eventStyleGetter}
                     firstDayOfWeek={1}
                     messages={{
                         today: "Hoy",
@@ -159,7 +179,6 @@ const ClientDetailPage = () => {
                         <th>Acción</th>
                         <th>Clases</th>
                         <th>Descripción</th>
-                        <th>Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -169,7 +188,6 @@ const ClientDetailPage = () => {
                                 <td>{log.action === "add" ? "Paquete Asignado" : "Clase Asistida"}</td>
                                 <td>{log.slots}</td>
                                 <td>{log.description}</td>
-                                <td>{moment(log.date).format("D [de] MMMM [de] YYYY, h:mm A")}</td>
                             </tr>
                         ))
                     ) : (

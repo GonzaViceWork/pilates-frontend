@@ -36,11 +36,26 @@ const CalendarPage = () => {
                 title: `${session.session_type === "group" ? "Sesión Grupal" : "Sesión Privada"} - ${moment(session.date).format("DD-MM-YYYY h:mm A")}`,
                 start: new Date(session.date),
                 end: new Date(moment(session.date).add(1, 'hours')),
+                status: session.status, // Asegurar que el estado esté en el evento
             }));
             setSessions(formattedSessions);
         } catch (error) {
             console.error("Error al obtener las sesiones:", error);
         }
+    };
+
+    const getEventStyle = (event) => {
+        const backgroundColor = event.status === "finished" ? "#4CAF50" : "#2196F3"; // Verde si terminada, azul si pendiente
+    
+        return {
+            style: {
+                backgroundColor,
+                color: "white", // Texto en blanco para contraste
+                borderRadius: "5px",
+                border: "none",
+                padding: "5px",
+            },
+        };
     };
 
     const handleSelectEvent = (event) => {
@@ -80,6 +95,7 @@ const CalendarPage = () => {
                         event: "Evento",
                     }}
                     firstDayOfWeek={1}
+                    eventPropGetter={getEventStyle}
                 />
             </div>
 
