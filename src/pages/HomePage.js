@@ -1,9 +1,8 @@
-import React from "react";
-
 const HomePage = () => {
     return (
         <div style={styles.container}>
-            <h1>Bienvenid@ a Pilates Verónica Studio</h1>
+            <h1>Bienvenid@ a Verónica Pilates Studio</h1>
+            <img src="/veronica_pilates.png" alt="Verónica Pilates Studio" style={styles.image} />
             <p>Administra clientes, sesiones y paquetes con facilidad.</p>
             
             <h2>📌 ¿Qué puedes hacer aquí?</h2>
@@ -25,6 +24,11 @@ const styles = {
         textAlign: "center",
         marginTop: "20px",
     },
+    image: {
+        width: "200px", // Ajusta el tamaño según sea necesario
+        height: "auto",
+        marginBottom: "20px",
+    }
 };
 
 export default HomePage;
