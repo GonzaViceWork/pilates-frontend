@@ -62,7 +62,7 @@ const CreateSessionPage = () => {
                 date: utcDate,
                 room: newEvent.room,
                 session_type: newEvent.session_type,
-                status: newEvent.status,
+                status: "pending",
                 clients: newEvent.clients,
                 attended_clients: [],
             });
@@ -106,17 +106,6 @@ const CreateSessionPage = () => {
                     >
                         <option value="group">Grupal</option>
                         <option value="private">Privada</option>
-                    </select>
-                </label>
-
-                <label>
-                    Estado:
-                    <select
-                        value={newEvent.status}
-                        onChange={(e) => setNewEvent({ ...newEvent, status: e.target.value })}
-                    >
-                        <option value="pending">Pendiente</option>
-                        <option value="finished">Terminada</option>
                     </select>
                 </label>
 
